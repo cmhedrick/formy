@@ -134,3 +134,4 @@ dmypy.json
 # Project specific
 *.json
 prod_settings.py
+local_settings.py
