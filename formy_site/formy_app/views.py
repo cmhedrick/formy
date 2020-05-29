@@ -33,7 +33,17 @@ def custom_form_view(request, spreadsheet_id=None):
                     worksheet.update_cell(row, index, request.POST[field])
         except:
             return HttpResponse("Invalid header found.")
-        return redirect("formy_app:success")
+        # return redirect("formy_app:success")
+        form = CustomForm(context=request, spreadsheet=spreadsheet)
+        return render(
+            request,
+            "form.html",
+            {
+                "form": form,
+                "title": spreadsheet.title,
+                "success_msg": "Success! Thanks for submitting!",
+            },
+        )
     return render(request, "form.html", {"form": form, "title": spreadsheet.title})
 
 

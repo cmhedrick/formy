@@ -119,6 +119,9 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <main role="main" class="inner cover">
             <h1>{{title}}</h1>
+            {% if success_msg %}
+              <h2>{{success_msg}}</h2>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
