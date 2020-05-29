@@ -113,6 +113,11 @@
         color: rgba(255, 255, 255, .5);
       }
 
+      .success-msg {
+        margin: 0;
+        margin-bottom: 0;
+      }
+
     </style>
   </head>
   <body class="text-center">
@@ -120,7 +125,7 @@
         <main role="main" class="inner cover">
             <h1>{{title}}</h1>
             {% if success_msg %}
-              <h2>{{success_msg}}</h2>
+              <p class="success-msg">{{success_msg}}</p>
             {% endif %}
             <form method="post">
                 {% csrf_token %}
