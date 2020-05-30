@@ -34,9 +34,11 @@ class SpreadsheetField(models.Model):
     INTEGER = "INTEGER"
     STRING = "STRING"
     BOOL = "BOOL"
+    AREA = "AREA"
     FIELD_CHOICES = [
         (INTEGER, "Integer/Number"),
-        (STRING, "String/Text"),
+        (STRING, "String/Text Short"),
+        (AREA, "String/Text Long"),
         (BOOL, "True/False"),
     ]
     spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)

@@ -19,6 +19,10 @@ class CustomForm(forms.Form):
                 self.fields[key] = forms.CharField(
                     required=True, label=field.field_name
                 )
+            elif field.field_type == "AREA":
+                self.fields[key] = forms.CharField(
+                    required=True, label=field.field_name, widget=forms.Textarea
+                )
             elif field.field_type == "BOOL":
                 self.fields[key] = forms.BooleanField(
                     required=True, label=field.field_name
