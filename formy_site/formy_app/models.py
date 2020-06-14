@@ -25,6 +25,7 @@ class Spreadsheet(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=50)
     url = models.URLField(blank=True)
+    track_sub_times = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.user.email}: {self.title}"

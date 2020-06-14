@@ -1,10 +1,13 @@
+import datetime
+
 import gspread
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-# we want to allow
+# we want to allow iframes to send data
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from .forms import CustomForm
 from .models import User, Spreadsheet, SpreadsheetField, Credential
@@ -31,9 +34,14 @@ def custom_form_view(request, spreadsheet_id=None):
                     index += 1
                 if not field == "csrfmiddlewaretoken":
                     worksheet.update_cell(row, index, request.POST[field])
+            if spreadsheet.track_sub_times:
+                index += 1
+                worksheet.update_cell(
+                    row, index, timezone.now().strftime("%d/%m/%Y %H:%m")
+                )
+
         except:
             return HttpResponse("Invalid header found.")
-        # return redirect("formy_app:success")
         form = CustomForm(context=request, spreadsheet=spreadsheet)
         return render(
             request,
