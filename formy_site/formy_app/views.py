@@ -1,10 +1,13 @@
+import datetime
+
 import gspread
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-# we want to allow
+# we want to allow iframes to send data
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 from .forms import CustomForm
 from .models import User, Spreadsheet, SpreadsheetField, Credential
@@ -26,14 +29,33 @@ def custom_form_view(request, spreadsheet_id=None):
         worksheet = google_spreadsheet.sheet1
         row = next_available_row(worksheet)
         try:
+            # if the first row set titles of columns
+            if row == 1:
+                for index, field in enumerate(request.POST):
+                    if index == 0:
+                        index += 1
+                    if not field == "csrfmiddlewaretoken":
+                        worksheet.update_cell(row, index, field)
+                if spreadsheet.track_sub_times:
+                    index += 1
+                    worksheet.update_cell(
+                        row, index, "Time Submitted (DD/MM/YYYY HH:MM)"
+                    )
+                row += 1
+
             for index, field in enumerate(request.POST):
                 if index == 0:
                     index += 1
                 if not field == "csrfmiddlewaretoken":
                     worksheet.update_cell(row, index, request.POST[field])
+            if spreadsheet.track_sub_times:
+                index += 1
+                worksheet.update_cell(
+                    row, index, timezone.now().strftime("%d/%m/%Y %H:%M")
+                )
+
         except:
             return HttpResponse("Invalid header found.")
-        # return redirect("formy_app:success")
         form = CustomForm(context=request, spreadsheet=spreadsheet)
         return render(
             request,
