@@ -29,6 +29,20 @@ def custom_form_view(request, spreadsheet_id=None):
         worksheet = google_spreadsheet.sheet1
         row = next_available_row(worksheet)
         try:
+            # if the first row set titles of columns
+            if row == 1:
+                for index, field in enumerate(request.POST):
+                    if index == 0:
+                        index += 1
+                    if not field == "csrfmiddlewaretoken":
+                        worksheet.update_cell(row, index, field)
+                if spreadsheet.track_sub_times:
+                    index += 1
+                    worksheet.update_cell(
+                        row, index, "Time Submitted (DD/MM/YYYY HH:MM)"
+                    )
+                row += 1
+
             for index, field in enumerate(request.POST):
                 if index == 0:
                     index += 1
@@ -37,7 +51,7 @@ def custom_form_view(request, spreadsheet_id=None):
             if spreadsheet.track_sub_times:
                 index += 1
                 worksheet.update_cell(
-                    row, index, timezone.now().strftime("%d/%m/%Y %H:%m")
+                    row, index, timezone.now().strftime("%d/%m/%Y %H:%M")
                 )
 
         except:
