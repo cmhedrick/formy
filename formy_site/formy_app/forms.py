@@ -25,5 +25,5 @@ class CustomForm(forms.Form):
                 )
             elif field.field_type == "BOOL":
                 self.fields[key] = forms.BooleanField(
-                    required=True, label=field.field_name
+                    required=False, label=field.field_name
                 )

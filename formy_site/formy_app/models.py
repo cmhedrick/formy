@@ -45,6 +45,7 @@ class SpreadsheetField(models.Model):
     spreadsheet = models.ForeignKey(Spreadsheet, on_delete=models.CASCADE)
     field_name = models.CharField(max_length=50)
     field_type = models.CharField(max_length=32, choices=FIELD_CHOICES, default=STRING,)
+    sort_pos = models.IntegerField(verbose_name="Sort Position", null=True)
 
     def __str__(self):
         return f"SpreadID:{self.spreadsheet.title}| {self.spreadsheet.title}: {self.field_name}"
